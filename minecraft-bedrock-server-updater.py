@@ -35,3 +35,16 @@ link = os.readlink(install_symlink)
 print(f'Symlink: {link}')
 # TODO regex match against the symlink, or do "something else" to figure
 # out the installed version
+sym_match = re.match(r'.*minecraft-server-(?P<version>[0-9.]+)$', link)
+if sym_match is None:
+    sys.exit('Could not parse version of current minecraft-server install')
+
+installed_version = sym_match.group('version')
+
+if installed_version == upstream_version:
+    print('Up-to-date!')
+    sys.exit(0)
+else:
+    print(f'Installed version {installed_version} != upstream version {upstream_version}')
+    sys.exit(1)
+
